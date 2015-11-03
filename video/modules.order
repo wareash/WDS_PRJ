@@ -1,0 +1,6 @@
+kernel//home/book/work/project/video/vivi.ko
+kernel//home/book/work/project/video/videobuf-core.ko
+kernel//home/book/work/project/video/videobuf-vmalloc.ko
+kernel//home/book/work/project/video/v4l2-common.ko
+kernel//home/book/work/project/video/v4l2-device.ko
+kernel//home/book/work/project/video/v4l2-ioctl.ko
