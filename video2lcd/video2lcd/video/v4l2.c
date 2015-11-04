@@ -7,8 +7,15 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/mman.h>
+#include <poll.h>
 
-static int g_aiSupported_Format[] = {V4L2_PIX_FMT_YUYV, V4L2_PIX_FMT_MJPEG, V4L2_PIX_FMT_RGB565, V4L2_PIX_FMT_RGB24, V4L2_PIX_FMT_RGB32};
+
+static int g_aiSupported_Format[] = {V4L2_PIX_FMT_YUYV, V4L2_PIX_FMT_MJPEG, V4L2_PIX_FMT_RGB565};
+
+static int V4L2GetFrameForReadWrite(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf);
+static int V4L2PutFrameForReadWrite(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf)
+struct T_VideoOpr g_tV4l2VideoOpr;
+
 
 
 static int isSupportThisFormat(int iPixelFormat)
@@ -147,7 +154,8 @@ static int V4L2InitDevice (char *strDevName, PT_VideoDevice pt_VideoDevice)
 	if(tV4l2Cap.cap->capabilities & V4L2_CAP_STREAMING)
 	{
 		/* map the buffers */
-		for (i = 0; i < NB_BUFFER; i++) {
+		for (i = 0; i < pt_VideoDevice->iVideoBufCnt; i++) 
+		{
 			memset(&tV42lBuf, 0, sizeof(struct v4l2_buffer));
 			tV42lBuf.index = i;
 			tV42lBuf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
@@ -157,9 +165,9 @@ static int V4L2InitDevice (char *strDevName, PT_VideoDevice pt_VideoDevice)
 				DBG_PRINTF("Unable to query buffer .\n");
 				goto err_exit;
 			}
-
+			pt_VideoDevice->iVideoBufMaxLen = tV42lBuf.length;
 			pt_VideoDevice->pucVideoBuf[i] = mmap(0 /* start anywhere */ ,
-					  tV42lBuf, PROT_READ, MAP_SHARED, iFd,
+					  tV42lBuf.length, PROT_READ, MAP_SHARED, iFd,
 					  tV42lBuf.m.offset);
 			if (pt_VideoDevice->pucVideoBuf[i] == MAP_FAILED) 
 			{
@@ -171,10 +179,14 @@ static int V4L2InitDevice (char *strDevName, PT_VideoDevice pt_VideoDevice)
 	}
 	else if (tV4l2Cap->capabilities  & V4L2_CAP_READWRITE)
 	{
+		g_tV4l2VideoOpr.GetFrame = V4L2GetFrameForReadWrite;
+		g_tV4l2VideoOpr.PutFrame = V4L2PutFrameForReadWrite;
+	
 		/*read(fd  buf, size)*/
 		pt_VideoDevice->iVideoBufCnt = 1;
+		pt_VideoDevice->iVideoBufMaxLen = pt_VideoDevice->iWidth * pt_VideoDevice->iHeight * 4;
 		/*在这个程序所能支持的格式里一个像素最多需要4个字节*/
-		pt_VideoDevice->pucVideoBuf[0] = malloc(pt_VideoDevice->iWidth * pt_VideoDevice->iHeight * 4);
+		pt_VideoDevice->pucVideoBuf[0] = malloc(pt_VideoDevice->iVideoBufMaxLen);
 	}
 
 	 /* Queue the buffers. */
@@ -191,7 +203,6 @@ static int V4L2InitDevice (char *strDevName, PT_VideoDevice pt_VideoDevice)
 		}
     }
 
-
 	return 0;
 err_exit:
 	close(iFd);
@@ -202,27 +213,135 @@ static int V4L2ExitDevice(PT_VideoDevice pt_VideoDevice)
 	int i;
 	close(pt_VideoDevice->iFd);
 
-	for(i = 0; i<)
+	for (i = 0; i < pt_VideoDevice->iVideoBufCnt; i++) 
+	{
+		if(pt_VideoDevice->pucVideoBuf[i])
+		{
+			munmap(pt_VideoDevice->pucVideoBuf[i], pt_VideoDevice->iVideoBufMaxLen);
+			pt_VideoDevice->pucVideoBuf[i] = NULL;
+		}
+	}
 	return 0;
 }
 
-static int V4L2GetFrame(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf)
+static int V4L2GetFrameForStreaming(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf)
 {
+	struct pollfd tFds[1];
+	int iRet;
+	struct v4l2_buffer tV4l2Buf;
+
+	/*poll*/
+	tFds[0].fd = pt_VideoDevice.iFd;
+	tFds[0].event = POLLIN;
+
+	iRet = poll(tFds, 1, -1);
+	if(iRet <=0 )
+	{
+		DBG_PRINTF("poll error!\n");
+		return -1;
+	}
+
+	/*VIDIOC_DQBUF*/
+    memset(&tV4l2Buf, 0, sizeof(struct v4l2_buffer));
+    tV4l2Buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    tV4l2Buf.memory = V4L2_MEMORY_MMAP;
+    iRet = ioctl(pt_VideoDevice->iFd, VIDIOC_DQBUF, &tV4l2Buf);
+    if (iRet < 0) 
+	{
+		DBG_PRINTF("Unable to dequeue buffer .\n");
+		return -1;
+    }
+	pt_VideoDevice->iVideoBufCurIndex = tV4l2Buf.index;
+	ptVideoBuf->iPixelFormat = pt_VideoDevice->iPixFormat;
+	ptVideoBuf->tPixelDatas.iWidth  = pt_VideoDevice->iWidth;
+	ptVideoBuf->tPixelDatas.iHeight = pt_VideoDevice->iHeight;
+	ptVideoBuf->tPixelDatas.iBpp    = (pt_VideoDevice->iPixFormat==V4L2_PIX_FMT_YUYV)? 16 : \
+										(pt_VideoDevice->iPixFormat==V4L2_PIX_FMT_MJPEG)?:0 \
+										 (pt_VideoDevice->iPixFormat==V4L2_PIX_FMT_RGB565):16;
+	ptVideoBuf->tPixelDatas.iLineBytes  = ptVideoBuf->tPixelDatas.iWidth*ptVideoBuf->tPixelDatas.iBpp/8;
+	ptVideoBuf->tPixelDatas.iTotalBytes = tV4l2Buf->byteused;
+	ptVideoBuf->tPixelDatas.aucPixelDatas= pt_VideoDevice->pucVideoBuf[tV4l2Buf.index];
+
+	
 	return 0;
 }
 
-static int V4L2PutFrame(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf)
+static int V4L2PutFrameForStreaming(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf)
+{
+	struct v4l2_buffer tV4l2Buf;
+	int iError;
+
+	/*VIDIOC_QBUF*/
+    /* Queue the buffers. */
+    for (i = 0; i < NB_BUFFER; ++i) {
+		memset(&tV4l2Buf, 0, sizeof(struct v4l2_buffer));
+		tV4l2Buf.index  = pt_VideoDevice->iVideoBufCurIndex;
+		tV4l2Buf.type   = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+		tV4l2Buf.memory = V4L2_MEMORY_MMAP;
+		iError = ioctl(pt_VideoDevice->iFd, VIDIOC_QBUF, &tV4l2Buf);
+		if (iError) 
+		{
+		    DBG_PRINTF("Unable to queue buffer).\n");
+			return -1;
+		}
+    }
+	return 0;
+}
+static int V4L2GetFrameForReadWrite(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf)
+{
+	int iRet;
+
+	iRet = read(pt_VideoDevice->iFd, pt_VideoDevice->pucVideoBuf[0], pt_VideoDevice->iVideoBufMaxLen);
+	if(iRet<=0)
+	{
+		DBG_PRINTF("can not read data\n");
+		return -1;
+	}
+	
+	ptVideoBuf->iPixelFormat = pt_VideoDevice->iPixFormat;
+	ptVideoBuf->tPixelDatas.iWidth  = pt_VideoDevice->iWidth;
+	ptVideoBuf->tPixelDatas.iHeight = pt_VideoDevice->iHeight;
+	ptVideoBuf->tPixelDatas.iBpp    = (pt_VideoDevice->iPixFormat==V4L2_PIX_FMT_YUYV)? 16 : \
+										(pt_VideoDevice->iPixFormat==V4L2_PIX_FMT_MJPEG)?:0 \
+										 (pt_VideoDevice->iPixFormat==V4L2_PIX_FMT_RGB565):16;
+	ptVideoBuf->tPixelDatas.iLineBytes  = ptVideoBuf->tPixelDatas.iWidth*ptVideoBuf->tPixelDatas.iBpp/8;
+	ptVideoBuf->tPixelDatas.iTotalBytes = iRet;
+	ptVideoBuf->tPixelDatas.aucPixelDatas= pt_VideoDevice->pucVideoBuf[0];
+
+	return 0;
+}
+
+static int V4L2PutFrameForReadWrite(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf)
 {
 	return 0;
 }
 
 static int V4L2StartDevice(PT_VideoDevice pt_VideoDevice)
 {
+    int iType = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    int iError;
+
+    iError = ioctl(pt_VideoDevice->iFd, VIDIOC_STREAMON, &type);
+    if (iError )
+	{
+		printf("Unable to start capture .\n" );
+		return -1;
+    }
+
 	return 0;
 }
 
 static int V4L2StopDevice(PT_VideoDevice pt_VideoDevice)
 {
+    int iType = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+    int iError;
+
+    iError = ioctl(pt_VideoDevice->iFd, VIDIOC_STREAMOFF, &type);
+    if (iError )
+	{
+		printf("Unable to stop capture .\n" );
+		return -1;
+    }
 	return 0;
 }
 
@@ -231,8 +350,8 @@ struct T_VideoOpr g_tV4l2VideoOpr = {
 		.name 			= "V4L2",
 		.InitDevice 	= V4L2InitDevice,
 		.ExitDevice		= V4L2ExitDevice,
-		.GetFrame		= V4L2GetFrame,
-		.PutFrame		= V4L2PutFrame,
+		.GetFrame		= V4L2GetFrameForStreaming,
+		.PutFrame		= V4L2PutFrameForStreaming,
 		.StartDevice	= V4L2StartDevice,
 		.StopDevice		= V4L2StopDevice,
 };

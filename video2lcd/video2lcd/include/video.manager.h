@@ -22,7 +22,8 @@ typedef struct VideoDevice{
 	int iHeight;
 
 	int iVideoBufCnt;
-
+	int iVideoBufMaxLen;
+	int iVideoBufCurIndex;
 	unsigned char *pucVideoBuf[NB_BUFFER];
 	
 	/*º¯Êý*/
