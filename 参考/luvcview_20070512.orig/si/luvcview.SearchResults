@@ -1,0 +1,7 @@
+---- QUERY Matches (0 in 0 files) ----
+---- VIDIOC_QUERYCAP Matches (3 in 2 files) ----
+V4l2uvc.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\参考\luvcview_20070512.orig\luvcview-20070512):    ret = ioctl(vd->fd, VIDIOC_QUERYCAP, &vd->cap);
+V4l2uvc.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\参考\luvcview_20070512.orig\luvcview-20070512):    ret = ioctl(vd->fd, VIDIOC_QUERYCAP, &vd->cap);
+V4l2uvc.h (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\参考\luvcview_20070512.orig\luvcview-20070512):VIDIOC_QUERYCAP
+---- VIDIOC_S_FMT Matches (1 in 1 files) ----
+V4l2uvc.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\参考\luvcview_20070512.orig\luvcview-20070512):    ret = ioctl(vd->fd, VIDIOC_S_FMT, &vd->fmt);

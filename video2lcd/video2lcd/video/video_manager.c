@@ -1,5 +1,5 @@
 #include <config.h>
-#include <fonts_manager.h>
+#include <video_manager.h>
 #include <string.h>
 
 static PT_VideoOpr g_ptVideoOprHead = NULL;

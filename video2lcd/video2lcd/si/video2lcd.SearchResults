@@ -1,0 +1,38 @@
+---- iWidth Matches (38 in 9 files) ----
+Bmp.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format): * 输入参数： iWidth      - 宽度,即多少个象素
+Bmp.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):static int CovertOneLine(int iWidth, int iSrcBpp, int iDstBpp, unsigned char *pudSrcDatas, unsigned char *pudDstDatas)
+Bmp.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):		memcpy(pudDstDatas, pudSrcDatas, iWidth*3);
+Bmp.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):		for (i = 0; i < iWidth; i++)
+Bmp.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):	int iWidth;
+Bmp.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):	iWidth = ptBITMAPINFOHEADER->biWidth;
+Bmp.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):	ptPixelDatas->iWidth  = iWidth;
+Bmp.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):	ptPixelDatas->iLineBytes    = iWidth * ptPixelDatas->iBpp / 8;
+Bmp.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):	iLineWidthReal = iWidth * iBMPBpp / 8;
+Bmp.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):		CovertOneLine(iWidth, iBMPBpp, ptPixelDatas->iBpp, pucSrc, pucDest);
+Disp_manager.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\display):	ptNew->tPixelDatas.iWidth  = iXres;
+Disp_manager.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\display):		ptNew->tPixelDatas.iWidth  = iXres;
+Jpg.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format): * 输入参数： iWidth      - 宽度,即多少个象素
+Jpg.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):static int CovertOneLine(int iWidth, int iSrcBpp, int iDstBpp, unsigned char *pudSrcDatas, unsigned char *pudDstDatas)
+Jpg.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):		memcpy(pudDstDatas, pudSrcDatas, iWidth*3);
+Jpg.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):		for (i = 0; i < iWidth; i++)
+Jpg.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):	ptPixelDatas->iWidth  = tDInfo.output_width;
+Jpg.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):	ptPixelDatas->iLineBytes    = ptPixelDatas->iWidth * ptPixelDatas->iBpp / 8;
+Jpg.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\format):		CovertOneLine(ptPixelDatas->iWidth, 24, ptPixelDatas->iBpp, aucLineBuffer, pucDest);
+Merge.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\operation):	if ((ptSmallPic->iWidth > ptBigPic->iWidth)  ||
+Merge.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\operation): *            iWidth, iHeight                  : 合并区域的大小
+Merge.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\operation):int PicMergeRegion(int iStartXofNewPic, int iStartYofNewPic, int iStartXofOldPic, int iStartYofOldPic, int iWidth, int iHeight, PT_PixelDatas ptNewPic, PT_PixelDatas ptOldPic)
+Merge.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\operation):    int iLineBytesCpy = iWidth * ptNewPic->iBpp / 8;
+Merge.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\operation):    if ((iStartXofNewPic < 0 || iStartXofNewPic >= ptNewPic->iWidth) || \
+Merge.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\operation):        (iStartXofOldPic < 0 || iStartXofOldPic >= ptOldPic->iWidth) || \
+Pic_operation.h (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\include):	int iWidth;   /* 宽度: 一行有多少个象素 */
+Render.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render):	int iWidth, iHeight;
+Render.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render):	iWidth  = iMaxX - iMinX;
+Render.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render):    if (iWidth > iBotRightX - iTopLeftX)
+Render.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render):        iWidth = iBotRightX - iTopLeftX;
+Render.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render):	//DBG_PRINTF("iWidth = %d, iHeight = %d\n", iWidth, iHeight);
+Render.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render):	iStrTopLeftX = iTopLeftX + (iBotRightX - iTopLeftX - iWidth) / 2;
+Render.h (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\include): *            iWidth, iHeight                  : 合并区域的大小
+Render.h (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\include):int PicMergeRegion(int iStartXofNewPic, int iStartYofNewPic, int iStartXofOldPic, int iStartYofOldPic, int iWidth, int iHeight, PT_PixelDatas ptNewPic, PT_PixelDatas ptOldPic);
+Video.manager.h (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\include):	int iWidth;
+Zoom.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\operation):    unsigned long dwDstWidth = ptZoomPic->iWidth;
+Zoom.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\render\operation):        pdwSrcXTable[x]=(x*ptOriginPic->iWidth/ptZoomPic->iWidth);
