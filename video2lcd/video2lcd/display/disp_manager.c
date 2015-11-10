@@ -109,6 +109,7 @@ void SelectAndInitDefaultDispDev(char *name)
 	}
 }
 
+
 /**********************************************************************
  * 函数名称： GetDefaultDispDev
  * 功能描述： 程序事先用SelectAndInitDefaultDispDev选择了显示模块,
@@ -151,6 +152,26 @@ int GetDispResolution(int *piXres, int *piYres, int *piBpp)
 	{
 		return -1;
 	}
+}
+
+int GetVideoBufForDisplay(PT_VideoBuf ptFrameBuf)
+{
+	ptFrameBuf->iPixelFormat = (g_ptDefaultDispOpr->iBpp == 16)? V4L2_PIX_FMT_RGB565 : \
+								(g_ptDefaultDispOpr->iBpp == 32)? V4L2_PIX_FMT_RGB32 : \
+												0;
+	ptFrameBuf->tPixelDatas.iWidth = g_ptDefaultDispOpr->iXres;
+	ptFrameBuf->tPixelDatas.iHeight= g_ptDefaultDispOpr->iYres;
+	ptFrameBuf->tPixelDatas.iBpp   = g_ptDefaultDispOpr->iBpp;
+	ptFrameBuf->tPixelDatas.iLineBytes= g_ptDefaultDispOpr->iLineWidth;
+	ptFrameBuf->tPixelDatas.iTotalBytes= g_ptDefaultDispOpr->iLineWidth * ptFrameBuf->tPixelDatas.iHeigh;
+	ptFrameBuf->tPixelDatas.aucPixelDatas = g_ptDefaultDispOpr->pucDispMem;
+	return 0;
+}
+
+
+void FlushPixelDataToDev(PT_PixelDatas ptPixelDatas)
+{
+	g_ptDefaultDispOpr->ShowPage(ptPixelDatas);
 }
 
 /**********************************************************************

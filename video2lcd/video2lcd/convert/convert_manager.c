@@ -87,6 +87,20 @@ PT_VideoConvert GetVideoConvert(char *pcName)
 }
 
 
+PT_VideoConvert GetVideoConvertForFormat(int iPixFormatIn, int iPixFormatOut)
+{
+	PT_VideoConvert ptTmp = g_ptVideoConvertHead;
+	
+	while (ptTmp)
+	{
+		if (ptTmp->isSupport(iPixFormatIn, iPixFormatOut))
+		{
+			return ptTmp;
+		}
+		ptTmp = ptTmp->ptNext;
+	}
+	return NULL;
+}
 /**********************************************************************
  * 函数名称： FontsInit
  * 功能描述： 调用各个字体模块的初始化函数

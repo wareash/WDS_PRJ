@@ -150,6 +150,21 @@ static int V4L2InitDevice (char *strDevName, PT_VideoDevice pt_VideoDevice)
 		goto err_exit;
     }
 	pt_VideoDevice->iVideoBufCnt = tV4l2ReqBufs.count;
+
+	 /* Queue the buffers. */
+    for (i = 0; i < pt_VideoDevice->iVideoBufCnt; i++) 
+	{
+		memset(&tV42lBuf, 0, sizeof(struct v4l2_buffer));
+		tV42lBuf.index = i;
+		tV42lBuf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+		tV42lBuf.memory = V4L2_MEMORY_MMAP;
+		iError= ioctl(iFd, VIDIOC_QBUF, &tV42lBuf);
+		if (iError) {
+		    DBG_PRINTF("Unable to queue buffer\n");
+		    goto err_exit;;
+		}
+    }
+	
 	//mmap
 	if(tV4l2Cap.cap->capabilities & V4L2_CAP_STREAMING)
 	{
@@ -189,19 +204,8 @@ static int V4L2InitDevice (char *strDevName, PT_VideoDevice pt_VideoDevice)
 		pt_VideoDevice->pucVideoBuf[0] = malloc(pt_VideoDevice->iVideoBufMaxLen);
 	}
 
-	 /* Queue the buffers. */
-    for (i = 0; i < pt_VideoDevice->iVideoBufCnt; i++) 
-	{
-		memset(&tV42lBuf, 0, sizeof(struct v4l2_buffer));
-		tV42lBuf.index = i;
-		tV42lBuf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-		tV42lBuf.memory = V4L2_MEMORY_MMAP;
-		iError= ioctl(iFd, VIDIOC_QBUF, &tV42lBuf);
-		if (iError) {
-		    DBG_PRINTF("Unable to queue buffer\n");
-		    goto err_exit;;
-		}
-    }
+	pt_VideoDevice->ptopr = &g_tV4l2VideoOpr;
+	
 
 	return 0;
 err_exit:
@@ -310,6 +314,10 @@ static int V4L2GetFrameForReadWrite(PT_VideoDevice pt_VideoDevice, PT_VideoBuf p
 
 	return 0;
 }
+static int V4l2GetFormat(PT_VideoDevice ptVideoDevice)
+{
+	return ptVideoDevice->iPixFormat;
+}
 
 static int V4L2PutFrameForReadWrite(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf)
 {
@@ -351,6 +359,7 @@ struct T_VideoOpr g_tV4l2VideoOpr = {
 		.InitDevice 	= V4L2InitDevice,
 		.ExitDevice		= V4L2ExitDevice,
 		.GetFrame		= V4L2GetFrameForStreaming,
+		.GetFormat		= V4l2GetFormat,
 		.PutFrame		= V4L2PutFrameForStreaming,
 		.StartDevice	= V4L2StartDevice,
 		.StopDevice		= V4L2StopDevice,

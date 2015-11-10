@@ -163,9 +163,12 @@ static int FBShowPixel(int iX, int iY, unsigned int dwColor)
  * -----------------------------------------------
  * 2013/02/08	     V1.0	  韦东山	      创建
  ***********************************************************************/
-static int FBShowPage(PT_VideoMem ptVideoMem)
+static int FBShowPage(PT_PixelDatas ptPixelDatas)
 {
-	memcpy(g_tFBOpr.pucDispMem, ptVideoMem->tPixelDatas.aucPixelDatas, ptVideoMem->tPixelDatas.iTotalBytes);
+	if(g_tFBOpr.pucDispMem != ptPixelDatas->aucPixelDatas)
+	{
+		memcpy(g_tFBOpr.pucDispMem, ptPixelDatas->aucPixelDatas, ptPixelDatas->iTotalBytes);
+	}
 	return 0;
 }
 

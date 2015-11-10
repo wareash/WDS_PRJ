@@ -94,7 +94,7 @@ struct T_VideoConvert  g_tRgb2RgbConvert = {
 };
 
 /*зЂВс*/
-int Yuv2RgbInit(void)
+int Rgb2RgbInit(void)
 {
 	return RegisterVideoConvert(g_tRgb2RgbConvert);
 }

@@ -13,7 +13,9 @@ typedef struct VideoConvert{
 }T_VideoConvert,*PT_VideoConvert;
 
 
+PT_VideoConvert GetVideoConvertForFormat(int iPixFormatIn, int iPixFormatOut);
 
+int VideoConvertInit(void);
 
 
 #endif  /*_CONVERT_MANGER_H*/

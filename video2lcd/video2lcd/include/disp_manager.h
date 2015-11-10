@@ -53,7 +53,7 @@ typedef struct DispOpr {
 	int (*DeviceInit)(void);     /* 设备初始化函数 */
 	int (*ShowPixel)(int iPenX, int iPenY, unsigned int dwColor);    /* 把指定座标的象素设为某颜色 */
 	int (*CleanScreen)(unsigned int dwBackColor);                    /* 清屏为某颜色 */
-	int (*ShowPage)(PT_VideoMem ptVideoMem);                         /* 显示一页,数据源自ptVideoMem */
+	int (*ShowPage)(PT_PixelDatas ptPixelDatas);                        /* 显示一页,数据源自ptVideoMem */
 	struct DispOpr *ptNext;      /* 链表 */
 }T_DispOpr, *PT_DispOpr;
 
@@ -226,6 +226,9 @@ void ClearVideoMemRegion(PT_VideoMem ptVideoMem, PT_Layout ptLayout, unsigned in
  * 2013/02/08	     V1.0	  韦东山	      创建
  ***********************************************************************/
 int FBInit(void);
+
+int GetVideoBufForDisplay(PT_VideoBuf ptFrameBuf);
+
 
 #endif /* _DISP_MANAGER_H */
 

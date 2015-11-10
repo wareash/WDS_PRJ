@@ -41,6 +41,7 @@ typedef struct VideoOpr{
 	int (*InitDevice)(char *strDevName, PT_VideoDevice pt_VideoDevice);
 	int (*ExitDevice)(PT_VideoDevice pt_VideoDevice);
 	int (*GetFrame)(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf);
+	int (*GetFormat)(PT_VideoDevice pt_VideoDevice);
 	int (*PutFrame)(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf);
 	int (*StartDevice)(PT_VideoDevice pt_VideoDevice);
 	int (*StopDevice)(PT_VideoDevice pt_VideoDevice);
@@ -49,6 +50,7 @@ typedef struct VideoOpr{
 
 int V4L2Init(void);
 
+int VideoDeviceInit(char *strDevName, PT_VideoDevice ptVideoDevice);
 
 
 #endif /*_VIDEO_MANGER_H*/

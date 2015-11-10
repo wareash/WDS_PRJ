@@ -86,6 +86,22 @@ PT_VideoOpr GetVideoOpr(char *pcName)
 	return NULL;
 }
 
+int VideoDeviceInit(char *strDevName, PT_VideoDevice ptVideoDevice)
+{
+	int iError;
+	PT_VideoOpr ptTmp = g_ptVideoOprHead;
+	
+	while (ptTmp)
+	{
+		iError = ptTmp->InitDevice(strDevName, ptVideoDevice);
+		if(!iError)
+		{
+			return 0;
+		}
+		ptTmp = ptTmp->ptNext;
+	}
+	return -1;
+}
 
 /**********************************************************************
  * º¯ÊýÃû³Æ£º FontsInit

@@ -27,6 +27,7 @@ void FlushVideoMemToDev(PT_VideoMem ptVideoMem)
 	}
 }
 
+
 /**********************************************************************
  * 函数名称： GetPixelDatasForIcon
  * 功能描述： 取出BMP格式的图标文件中的象素数据
