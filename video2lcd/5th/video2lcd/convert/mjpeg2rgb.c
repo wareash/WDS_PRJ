@@ -231,7 +231,6 @@ static int Mjpeg2RgbConvertExit(PT_VideoBuf ptVideoBufOut)
 
 /* ππ‘Ï */
 static T_VideoConvert g_tMjpeg2RgbConvert = {
-	.name 		 = "mjpeg2rgb",
     .isSupport   = isSupportMjpeg2Rgb,
     .Convert     = Mjpeg2RgbConvert,
     .ConvertExit = Mjpeg2RgbConvertExit,

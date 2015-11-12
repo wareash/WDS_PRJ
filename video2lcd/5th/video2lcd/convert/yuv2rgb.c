@@ -119,7 +119,6 @@ static int Yuv2RgbCovert (PT_VideoBuf ptVideoBufIn, PT_VideoBuf ptVideoBufOut)
 			ptPixDataOut->aucPixelDatas= malloc(ptPixDataOut->iTotalBytes);
 		}
 		Pyuv422torgb565(ptPixDataIn->aucPixelDatas, ptPixDataOut->aucPixelDatas, ptPixDataOut->iWidth, ptPixDataOut->iHeight);
-		return 0;
 	}
 	else if(ptVideoBufOut->iPixelFormat == V4L2_PIX_FMT_RGB32)
 	{
@@ -132,10 +131,9 @@ static int Yuv2RgbCovert (PT_VideoBuf ptVideoBufIn, PT_VideoBuf ptVideoBufOut)
 			ptPixDataOut->aucPixelDatas= malloc(ptPixDataOut->iTotalBytes);
 		}
 		Pyuv422torgb32(ptPixDataIn->aucPixelDatas, ptPixDataOut->aucPixelDatas, ptPixDataOut->iWidth, ptPixDataOut->iHeight);
-		return 0;
 	}
 
-	return -1;
+	return 0;
 }
 
 
@@ -154,7 +152,6 @@ static int Yuv2RgbConvertExit (PT_VideoBuf ptVideoBufOut)
 
 /*构造一个结构体*/
 static T_VideoConvert  g_tYuv2RgbConvert = {
-	.name		= "yuv2rgb",
 	.isSupport 	= Yuv2RgbisSupport,
 	.Convert   	= Yuv2RgbCovert,
 	.ConvertExit= Yuv2RgbConvertExit,

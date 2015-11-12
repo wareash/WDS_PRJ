@@ -28,13 +28,6 @@ int PicZoom(PT_PixelDatas ptOriginPic, PT_PixelDatas ptZoomPic)
 	unsigned char *pucSrc;
 	unsigned long dwPixelBytes = ptOriginPic->iBpp/8;
 
-//	DBG_PRINTF("src:\n");
-//	DBG_PRINTF("%d X %d , %d bpp ,data : 0x%x\n", ptOriginPic->iWidth,ptOriginPic->iHeight,ptOriginPic->iBpp,(unsigned int)ptOriginPic->aucPixelDatas);
-
-//	DBG_PRINTF("dst:\n");
-//	DBG_PRINTF("%d X %d , %d bpp ,data : 0x%x\n", ptZoomPic->iWidth,ptZoomPic->iHeight,ptZoomPic->iBpp,(unsigned int)ptZoomPic->aucPixelDatas);
-
-
 	if (ptOriginPic->iBpp != ptZoomPic->iBpp)
 	{
 		return -1;

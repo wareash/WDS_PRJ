@@ -89,7 +89,6 @@ int main(int argc, char **argv)
 
     memset(&tVideoBuf, 0, sizeof(tVideoBuf));
     memset(&tConvertBuf, 0, sizeof(tConvertBuf));
-	tConvertBuf.iPixelFormat = iPixelFormatOfDisp;
     tConvertBuf.tPixelDatas.iBpp = iLcdBpp;
     
     memset(&tZoomBuf, 0, sizeof(tZoomBuf));
@@ -110,7 +109,6 @@ int main(int argc, char **argv)
         {
             /* ×ª»»ÎªRGB */
             iError = ptVideoConvert->Convert(&tVideoBuf, &tConvertBuf);
-			DBG_PRINTF("Convert %s ,ret = %d\n", ptVideoConvert->name, iError);
             if (iError)
             {
                 DBG_PRINTF("Convert for %s error!\n", argv[1]);
