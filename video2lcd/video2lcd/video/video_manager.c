@@ -1,3 +1,4 @@
+
 #include <config.h>
 #include <video_manager.h>
 #include <string.h>
@@ -88,19 +89,19 @@ PT_VideoOpr GetVideoOpr(char *pcName)
 
 int VideoDeviceInit(char *strDevName, PT_VideoDevice ptVideoDevice)
 {
-	int iError;
+    int iError;
 	PT_VideoOpr ptTmp = g_ptVideoOprHead;
 	
 	while (ptTmp)
 	{
-		iError = ptTmp->InitDevice(strDevName, ptVideoDevice);
-		if(!iError)
-		{
-			return 0;
-		}
+        iError = ptTmp->InitDevice(strDevName, ptVideoDevice);
+        if (!iError)
+        {
+            return 0;
+        }
 		ptTmp = ptTmp->ptNext;
 	}
-	return -1;
+    return -1;
 }
 
 /**********************************************************************
@@ -117,14 +118,10 @@ int VideoInit(void)
 {
 	int iError;
 
-	iError = V4l2Init();
-	if (iError)
-	{
-		DBG_PRINTF("VideoInit error!\n");
-		return -1;
-	}
+    iError = V4l2Init();
 
 	return iError;
 }
+
 
 

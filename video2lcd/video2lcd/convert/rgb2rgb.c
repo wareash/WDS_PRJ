@@ -1,8 +1,10 @@
 
 #include <convert_manager.h>
+#include <stdlib.h>
+#include <string.h>
 
 
-static int Rgb2RgbisSupport (int iPixelFormatIn,int iPixelFormatOut)
+static int isSupportRgb2Rgb (int iPixelFormatIn,int iPixelFormatOut)
 {
 	if(iPixelFormatIn != V4L2_PIX_FMT_RGB565)		
 		return 0;
@@ -10,16 +12,16 @@ static int Rgb2RgbisSupport (int iPixelFormatIn,int iPixelFormatOut)
 		return 0;
 	return 1;
 }
-static int Rgb2RgbCovert (PT_VideoBuf ptVideoBufIn, PT_VideoBuf ptVideoBufOut)
+static int Rgb2RgbConvert (PT_VideoBuf ptVideoBufIn, PT_VideoBuf ptVideoBufOut)
 {
 	PT_PixelDatas ptPixDataIn = &ptVideoBufIn->tPixelDatas;
-	PT_PixelDatas ptPixDataOut ;
+	PT_PixelDatas ptPixDataOut = &ptVideoBufOut->tPixelDatas;
 
 	int x,y;
 	int r,g,b;
 	int color;
-	unsigned short *pwSrc = ptPixDataIn->aucPixelDatas;
-	unsigned int   *pdwDst = ptPixDataOut->aucPixelDatas;
+	unsigned short *pwSrc = (unsigned short *) ptPixDataIn ->aucPixelDatas;
+	unsigned int   *pdwDst;
 
 	if(ptVideoBufIn->iPixelFormat != V4L2_PIX_FMT_RGB565)
 	{
@@ -53,7 +55,7 @@ static int Rgb2RgbCovert (PT_VideoBuf ptVideoBufIn, PT_VideoBuf ptVideoBufOut)
 			ptPixDataOut->aucPixelDatas = malloc(ptPixDataOut->iTotalBytes);
 		}
 		
-		pdwDst = (unsigned int *) ptVideoBufOut->tPixelDatas;
+		pdwDst = (unsigned int *) ptPixDataOut->aucPixelDatas;
 		for(y=0; y < ptPixDataOut->iHeight; y++)
 		{
 			for(x=0; x < ptPixDataOut->iWidth; x++)
@@ -86,16 +88,16 @@ static  int Rgb2RgbConvertExit(PT_VideoBuf ptVideoBufOut)
 	return 0;
 }
 
-/*构造一个结构体*/
-struct T_VideoConvert  g_tRgb2RgbConvert = {
-	.isSupport 	= Rgb2RgbisSupport,
-	.Covert   	= Rgb2RgbCovert,
-	.ConvertExit= Rgb2RgbConvertExit,
+/* 11?ì */
+static T_VideoConvert g_tRgb2RgbConvert = {
+    .isSupport   = isSupportRgb2Rgb,
+    .Convert     = Rgb2RgbConvert,
+    .ConvertExit = Rgb2RgbConvertExit,
 };
 
 /*注册*/
 int Rgb2RgbInit(void)
 {
-	return RegisterVideoConvert(g_tRgb2RgbConvert);
+	return RegisterVideoConvert(&g_tRgb2RgbConvert);
 }
 

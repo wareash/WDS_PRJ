@@ -1,19 +1,28 @@
 /*MJPEG :实际上每一帧数据都是一个完整的JPEG的图片*/
 
 #include <convert_manager.h>
-#include "jinclude.h"
-#include "jpeglib.h"
-#include "jerror.h"
+#include <stdlib.h>
+#include <string.h>
+#include <setjmp.h>
+#include <jpeglib.h>
+
+typedef struct MyErrorMgr
+{
+	struct jpeg_error_mgr pub;
+	jmp_buf setjmp_buffer;
+}T_MyErrorMgr, *PT_MyErrorMgr;
 
 extern void jpeg_mem_src_tj(j_decompress_ptr, unsigned char * , unsigned long );
 
-static int Mjpeg2RgbisSupport (int iPixelFormatIn,int iPixelFormatOut)
+static int isSupportMjpeg2Rgb(int iPixelFormatIn, int iPixelFormatOut)
 {
-	if(iPixelFormatIn != V4L2_PIX_FMT_MJEG)		
-		return 0;
-	if((iPixelFormatOut != V4L2_PIX_FMT_RGB565) && (iPixelFormatOut != V4L2_PIX_FMT_RGB565))
-		return 0;
-	return 1;
+    if (iPixelFormatIn != V4L2_PIX_FMT_MJPEG)
+        return 0;
+    if ((iPixelFormatOut != V4L2_PIX_FMT_RGB565) && (iPixelFormatOut != V4L2_PIX_FMT_RGB32))
+    {
+        return 0;
+    }
+    return 1;
 }
 
 
@@ -120,9 +129,8 @@ static int CovertOneLine(int iWidth, int iSrcBpp, int iDstBpp, unsigned char *pu
  * 2015/11/6                  褚亭强          修改
  ***********************************************************************/
 //static int GetPixelDatasFrmJPG(PT_FileMap ptFileMap, PT_PixelDatas ptPixelDatas)
-/*把内存里的JPEG图像转换为RGB图像*/
-static int Mjpeg2RgbCovert (PT_VideoBuf ptVideoBufIn, PT_VideoBuf ptVideoBufOut)
-
+/* 把内存里的JPEG图像转换为RGB图像 */
+static int Mjpeg2RgbConvert(PT_VideoBuf ptVideoBufIn, PT_VideoBuf ptVideoBufOut)
 {
 	struct jpeg_decompress_struct tDInfo;
 	//struct jpeg_error_mgr tJErr;
@@ -131,7 +139,7 @@ static int Mjpeg2RgbCovert (PT_VideoBuf ptVideoBufIn, PT_VideoBuf ptVideoBufOut)
     unsigned char *aucLineBuffer = NULL;
     unsigned char *pucDest;
 	T_MyErrorMgr tJerr;
-	PT_PixelDatas ptPixelDatas = ptVideoBufIn->tPixelDatas;
+    PT_PixelDatas ptPixelDatas = &ptVideoBufOut->tPixelDatas;
 
 	// 分配和初始化一个decompression结构体
 	//tDInfo.err = jpeg_std_error(&tJErr);
@@ -210,9 +218,6 @@ static int Mjpeg2RgbCovert (PT_VideoBuf ptVideoBufIn, PT_VideoBuf ptVideoBufOut)
 }
 
 
-{
-	return 0;
-}
 
 static int Mjpeg2RgbConvertExit(PT_VideoBuf ptVideoBufOut)
 {
@@ -224,17 +229,17 @@ static int Mjpeg2RgbConvertExit(PT_VideoBuf ptVideoBufOut)
 	return 0;
 }
 
-
-/*构造一个结构体*/
-struct T_VideoConvert  g_tMjpeg2RgbConvert = {
-	.isSupport 	= Mjpeg2RgbisSupport,
-	.Covert   	= Mjpeg2RgbCovert,
-	.ConvertExit= Mjpeg2RgbConvertExit,
+/* 构造 */
+static T_VideoConvert g_tMjpeg2RgbConvert = {
+    .isSupport   = isSupportMjpeg2Rgb,
+    .Convert     = Mjpeg2RgbConvert,
+    .ConvertExit = Mjpeg2RgbConvertExit,
 };
 
-/*注册*/
+
+/* 注册 */
 int Mjpeg2RgbInit(void)
 {
-	return RegisterVideoConvert(g_tMjpeg2RgbConvert);
+    return RegisterVideoConvert(&g_tMjpeg2RgbConvert);
 }
 

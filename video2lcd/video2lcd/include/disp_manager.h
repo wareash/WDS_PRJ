@@ -2,6 +2,8 @@
 #define _DISP_MANAGER_H
 
 #include <pic_operation.h>
+#include <video_manager.h>
+#include <linux/videodev2.h>
 
 /* 显示区域,含该区域的左上角/右下角座标
  * 如果是图标,还含有图标的文件名
@@ -53,7 +55,7 @@ typedef struct DispOpr {
 	int (*DeviceInit)(void);     /* 设备初始化函数 */
 	int (*ShowPixel)(int iPenX, int iPenY, unsigned int dwColor);    /* 把指定座标的象素设为某颜色 */
 	int (*CleanScreen)(unsigned int dwBackColor);                    /* 清屏为某颜色 */
-	int (*ShowPage)(PT_PixelDatas ptPixelDatas);                        /* 显示一页,数据源自ptVideoMem */
+	int (*ShowPage)(PT_PixelDatas ptPixelDatas);                         /* 显示一页,数据源自ptVideoMem */
 	struct DispOpr *ptNext;      /* 链表 */
 }T_DispOpr, *PT_DispOpr;
 
@@ -228,7 +230,7 @@ void ClearVideoMemRegion(PT_VideoMem ptVideoMem, PT_Layout ptLayout, unsigned in
 int FBInit(void);
 
 int GetVideoBufForDisplay(PT_VideoBuf ptFrameBuf);
-
+void FlushPixelDatasToDev(PT_PixelDatas ptPixelDatas);
 
 #endif /* _DISP_MANAGER_H */
 

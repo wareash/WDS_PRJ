@@ -1,3 +1,4 @@
+
 #include <config.h>
 #include <convert_manager.h>
 #include <string.h>
@@ -86,21 +87,22 @@ PT_VideoConvert GetVideoConvert(char *pcName)
 	return NULL;
 }
 
-
-PT_VideoConvert GetVideoConvertForFormat(int iPixFormatIn, int iPixFormatOut)
+PT_VideoConvert GetVideoConvertForFormats(int iPixelFormatIn, int iPixelFormatOut)
 {
 	PT_VideoConvert ptTmp = g_ptVideoConvertHead;
 	
 	while (ptTmp)
 	{
-		if (ptTmp->isSupport(iPixFormatIn, iPixFormatOut))
-		{
-			return ptTmp;
-		}
+        if (ptTmp->isSupport(iPixelFormatIn, iPixelFormatOut))
+        {
+            return ptTmp;
+        }
 		ptTmp = ptTmp->ptNext;
 	}
 	return NULL;
 }
+
+
 /**********************************************************************
  * 函数名称： FontsInit
  * 功能描述： 调用各个字体模块的初始化函数
@@ -115,19 +117,14 @@ int VideoConvertInit(void)
 {
 	int iError;
 
-	iError  = Yuv2RgbInit();
-	iError |= Mjpeg2RgbInit();
-	iError |= Rgb2RgbInit();
-	
-
-	if (iError)
-	{
-		DBG_PRINTF("VideoConvertInit error!\n");
-		return -1;
-	}
+    iError = Yuv2RgbInit();
+    iError |= Mjpeg2RgbInit();
+    iError |= Rgb2RgbInit();
 
 	return iError;
 }
+
+
 
 
 

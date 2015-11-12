@@ -1,7 +1,7 @@
 
 #include <convert_manager.h>
-
-
+#include <stdlib.h>
+#include "color.h"
 
 
 static int Yuv2RgbisSupport (int iPixelFormatIn,int iPixelFormatOut)
@@ -24,9 +24,9 @@ Pyuv422torgb565(unsigned char * input_ptr, unsigned char * output_ptr, unsigned 
 	unsigned char *buff = input_ptr;
 	unsigned char *output_pt = output_ptr;
 
-	unsigned char r,g,b;
-	unsigned int  color;
-	
+    unsigned int r, g, b;
+    unsigned int color;
+    
 	size = image_width * image_height /2;
 	for (i = size; i > 0; i--) {
 		/* bgr instead rgb ?? */
@@ -39,25 +39,25 @@ Pyuv422torgb565(unsigned char * input_ptr, unsigned char * output_ptr, unsigned 
 		g = G_FROMYUV(Y,U,V); //b
 		b = B_FROMYU(Y,U); //v
 
-		/*把rgb三色构造为rgb565 16位值*/
-		r = r >> 3;
-		g = g >> 2;
-		b = b >> 3;
-		color = (r <<11) | (g << 5) | b;
-
-		r= R_FROMYV(Y1,V);
-		g= G_FROMYUV(Y1,U,V); //b
+        /* 把r,g,b三色构造为rgb565的16位值 */
+        r = r >> 3;
+        g = g >> 2;
+        b = b >> 3;
+        color = (r << 11) | (g << 5) | b;
+        *output_pt++ = color & 0xff;
+        *output_pt++ = (color >> 8) & 0xff;
+			
+		r = R_FROMYV(Y1,V);
+		g = G_FROMYUV(Y1,U,V); //b
 		b = B_FROMYU(Y1,U); //v
-		*output_pt++ = color & 0xff;
-		*output_pt++ = (color >> 8) & 0xff;
-
-		r = r >> 3;
-		g = g >> 2;
-		b = b >> 3;
-		color = (r <<11) | (g << 5) | b;
-		*output_pt++ = color & 0xff;
-		*output_pt++ = (color >> 8) & 0xff;
 		
+        /* 把r,g,b三色构造为rgb565的16位值 */
+        r = r >> 3;
+        g = g >> 2;
+        b = b >> 3;
+        color = (r << 11) | (g << 5) | b;
+        *output_pt++ = color & 0xff;
+        *output_pt++ = (color >> 8) & 0xff;
 	}
 	
 	return 0;
@@ -70,11 +70,11 @@ Pyuv422torgb32(unsigned char * input_ptr, unsigned char * output_ptr, unsigned i
 	unsigned int i, size;
 	unsigned char Y, Y1, U, V;
 	unsigned char *buff = input_ptr;
-	unsigned int *output_pt = output_ptr;
+	unsigned int *output_pt = (unsigned int *)output_ptr;
 
-	unsigned char r,g,b;
-	unsigned int  color;
-	
+    unsigned int r, g, b;
+    unsigned int color;
+
 	size = image_width * image_height /2;
 	for (i = size; i > 0; i--) {
 		/* bgr instead rgb ?? */
@@ -151,9 +151,9 @@ static int Yuv2RgbConvertExit (PT_VideoBuf ptVideoBufOut)
 
 
 /*构造一个结构体*/
-struct T_VideoConvert  g_tYuv2RgbConvert = {
+static T_VideoConvert  g_tYuv2RgbConvert = {
 	.isSupport 	= Yuv2RgbisSupport,
-	.Covert   	= Yuv2RgbCovert,
+	.Convert   	= Yuv2RgbCovert,
 	.ConvertExit= Yuv2RgbConvertExit,
 };
 
@@ -161,5 +161,5 @@ struct T_VideoConvert  g_tYuv2RgbConvert = {
 int Yuv2RgbInit(void)
 {
 	initLut();
-	return RegisterVideoConvert(g_tYuv2RgbConvert);
+	return RegisterVideoConvert(&g_tYuv2RgbConvert);
 }

@@ -1,0 +1,12 @@
+---- V4L2_PIX_FMT_RGB565 Matches (14 in 5 files) ----
+Disp_manager.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\display):	ptFrameBuf->iPixelFormat = (g_ptDefaultDispOpr->iBpp == 16)? V4L2_PIX_FMT_RGB565 :
+Mjpeg2rgb.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\convert):	if((iPixelFormatOut != V4L2_PIX_FMT_RGB565) && (iPixelFormatOut != V4L2_PIX_FMT_RGB565))
+Rgb2rgb.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\convert):	if(iPixelFormatIn != V4L2_PIX_FMT_RGB565)		
+Rgb2rgb.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\convert):	if((iPixelFormatOut != V4L2_PIX_FMT_RGB565) && (iPixelFormatOut != V4L2_PIX_FMT_RGB565))
+Rgb2rgb.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\convert):	if(ptVideoBufIn->iPixelFormat != V4L2_PIX_FMT_RGB565)
+Rgb2rgb.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\convert):	if(ptVideoBufOut->iPixelFormat == V4L2_PIX_FMT_RGB565)
+V4l2.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video):static int g_aiSupported_Format[] = {V4L2_PIX_FMT_YUYV, V4L2_PIX_FMT_MJPEG, V4L2_PIX_FMT_RGB565};
+V4l2.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video):										 (pt_VideoDevice->iPixFormat==V4L2_PIX_FMT_RGB565):16;
+V4l2.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video):										 (pt_VideoDevice->iPixFormat==V4L2_PIX_FMT_RGB565):16;
+Yuv2rgb.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\convert):	if((iPixelFormatOut != V4L2_PIX_FMT_RGB565) && (iPixelFormatOut != V4L2_PIX_FMT_RGB565))
+Yuv2rgb.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\convert):	if(ptVideoBufOut->iPixelFormat == V4L2_PIX_FMT_RGB565)
