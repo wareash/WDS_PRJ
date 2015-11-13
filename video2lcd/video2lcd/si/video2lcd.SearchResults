@@ -1,21 +1,4 @@
----- PT_VideoBuf Matches (24 in 9 files) ----
-Convert_manager.h (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\include):	int (*Covert) (PT_VideoBuf ptVideoBufIn, PT_VideoBuf ptVideoBufOut);
-Convert_manager.h (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\include):	int (*ConvertExit)(PT_VideoBuf ptVideoBufOut);
-Disp_manager.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\display):int GetVideoBufForDisplay(PT_VideoBuf ptFrameBuf)
-Disp_manager.h (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\include):int GetVideoBufForDisplay(PT_VideoBuf ptFrameBuf);
-Main.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd):    PT_VideoBuf ptVideoBufCur;
-Mjpeg2rgb.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\convert):static int Mjpeg2RgbCovert (PT_VideoBuf ptVideoBufIn, PT_VideoBuf ptVideoBufOut)
-Mjpeg2rgb.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\convert):static int Mjpeg2RgbConvertExit(PT_VideoBuf ptVideoBufOut)
-Rgb2rgb.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\convert):static int Rgb2RgbCovert (PT_VideoBuf ptVideoBufIn, PT_VideoBuf ptVideoBufOut)
-Rgb2rgb.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\convert):static  int Rgb2RgbConvertExit(PT_VideoBuf ptVideoBufOut)
-V4l2.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video):static int V4L2GetFrameForReadWrite(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf);
-V4l2.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video):static int V4L2PutFrameForReadWrite(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf)
-V4l2.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video):static int V4L2GetFrameForStreaming(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf)
-V4l2.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video):static int V4L2PutFrameForStreaming(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf)
-V4l2.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video):static int V4L2GetFrameForReadWrite(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf)
-V4l2.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video):static int V4L2PutFrameForReadWrite(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf)
-Video_manager.h (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\include):}T_VideoBuf,*PT_VideoBuf;
-Video_manager.h (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\include):	int (*GetFrame)(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf);
-Video_manager.h (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\include):	int (*PutFrame)(PT_VideoDevice pt_VideoDevice, PT_VideoBuf ptVideoBuf);
-Yuv2rgb.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\convert):static int Yuv2RgbCovert (PT_VideoBuf ptVideoBufIn, PT_VideoBuf ptVideoBufOut)
-Yuv2rgb.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\convert):static int Yuv2RgbConvertExit (PT_VideoBuf ptVideoBufOut)
+---- RegisterVideoOpr Matches (3 in 2 files) ----
+V4l2.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video):    return RegisterVideoOpr(&g_tV4l2VideoOpr);
+Video_manager.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video): * 函数名称： RegisterVideoOpr
+Video_manager.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video):int RegisterVideoOpr(PT_VideoOpr ptVideoOpr)
