@@ -55,7 +55,7 @@ int main(int argc, char **argv)
 	/* 注册显示设备 */
 	DisplayInit();
 	/* 可能可支持多个显示设备: 选择和初始化指定的显示设备 */
-	SelectAndInitDefaultDispDev("fb");
+	SelectAndInitDefaultDispDev("crt");
     GetDispResolution(&iLcdWidth, &iLcdHeigt, &iLcdBpp);
     GetVideoBufForDisplay(&tFrameBuf);
     iPixelFormatOfDisp = tFrameBuf.iPixelFormat;

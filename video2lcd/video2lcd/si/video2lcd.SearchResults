@@ -1,4 +1,2 @@
----- RegisterVideoOpr Matches (3 in 2 files) ----
-V4l2.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video):    return RegisterVideoOpr(&g_tV4l2VideoOpr);
-Video_manager.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video): * 函数名称： RegisterVideoOpr
-Video_manager.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video):int RegisterVideoOpr(PT_VideoOpr ptVideoOpr)
+---- read i/o Matches (1 in 1 files) ----
+V4l2.c (f:\a-常用文件夹\2.linux\source insight prj\第三期视频学习\project2\video2lcd\video2lcd\video):	    DBG_PRINTF("%s supports read i/o\n", strDevName);

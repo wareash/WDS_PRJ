@@ -556,6 +556,7 @@ int DisplayInit(void)
 	int iError;
 	
 	iError = FBInit();
+	iError |= CRTInit();
 
 	return iError;
 }
